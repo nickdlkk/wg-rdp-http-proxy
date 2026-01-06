@@ -8,6 +8,9 @@ on:
 jobs:
   build-and-push:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      packages: write
 
     steps:
       - name: Checkout repository
@@ -39,11 +42,11 @@ jobs:
         run: |
           TIMESTAMP=$(date -u +"%Y%m%d-%H%M%S")
           RELEASE_TAG="${{ env.REPO_NAME }}-$TIMESTAMP"
-          
+
           RELEASE_NAME="Build $TIMESTAMP"
           RELEASE_BODY="Docker image built and pushed successfully.
                         Image: ${{ secrets.DOCKER_USERNAME }}/${{ env.REPO_NAME }}:latest"
-          
+
           gh release create "$RELEASE_TAG" \
             --title "$RELEASE_NAME" \
             --notes "$RELEASE_BODY"
